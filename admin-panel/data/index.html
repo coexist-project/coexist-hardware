@@ -11,20 +11,42 @@
         <h1>COEXIST</h1><h2>Mini</h2>
     </nav>
     
-    <div class="networks">
-        <div class="option">
-            ETRR FREE
+    <div class="content">
+        <div class="title">
+            <h2>Conección</h2>
+            <div class="sub-line"></div>
         </div>
+        <div class="options">
+            <div class="option">
+                ETRR FREE
+            </div>
+            <div class="option">
+                ETRR FREE
+            </div>
+            <div class="option">
+                ETRR FREE
+            </div>
+        </div>
+        <button onclick="func()">new</button>
     </div>
 
     <script>
-        const networks = document.getElementsByClassName("networks")
-
+        const options = document.querySelector(".options")
+        
+        const func = () => {
+            const div = document.createElement('div')
+            console.log('as')
+            div.classList.add('option')
+            div.textContent = 'new element'
+            options.appendChild(div)
+        }
     </script>
     <style>
         html, body{
             margin: 0px;
             padding: 0px;
+            background: linear-gradient(rgb(36, 35, 35) 27%, #3949AB) fixed;
+            font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";
         }
 
         .navbar{
@@ -42,23 +64,55 @@
             margin-top: 10px;
         }
 
-        .networks{
+        .content {
             display: flex;
             flex-direction: column;
-            justify-self: center;
-            align-items: center;
-            height: 10vh;
+            height: 10%;
             translate: 0px -5vh;
             background-color: white;
-            border: solid 1px;
             border-radius: 10px;
             margin-right: 10%;
             margin-left: 10%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 10px 20px 0 rgba(0, 0, 0, 0.19);
         }
 
-        .networks option{
+        .title{
             display: flex;
-            background-color: grey;
+            flex-direction: column;
+            width: 100%;
+            margin-left: 5%;
+            justify-content: left;
+        }
+
+        .options{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3%;
+        }
+
+        .sub-line{
+            display: flex;
+            background: black;
+            width: 15%;
+            height: 5px;
+            border-radius: 10px;
+            margin-bottom: 3%;
+        }
+
+        .option {
+            display: flex;
+            width: 85%;
+            color: white;
+            border-radius: 10px;
+            justify-content: center;
+            background-color: #3949AB;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 10px 20px 0 rgba(0, 0, 0, 0.19);
+            margin-top: 3%;
+            margin-bottom: 3%;
+            padding-top: 3%;
+            padding-bottom: 3%;
         }
         
     </style>
