@@ -13,21 +13,24 @@
     
     <div class="content">
         <div class="title">
-            <h2>Conección</h2>
-            <div class="sub-line"></div>
+            <h2>Conexión</h2>
+            <div  class="sub-line"></div>
         </div>
         <div class="options">
+            <details class="option">
+                <summary>ETRR FREE</summary>
+                <div class="infoWiFi">
+                    <input type="password" class="passwordInp" name="password" id="" placeholder="password">
+                </div>
+            </details>
             <div class="option">
                 ETRR FREE
             </div>
             <div class="option">
                 ETRR FREE
             </div>
-            <div class="option">
-                ETRR FREE
-            </div>
+            <button onclick="func()" class="nextBtn">Siguiente</button>
         </div>
-        <button onclick="func()">new</button>
     </div>
 
     <script>
@@ -49,6 +52,22 @@
             font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";
         }
 
+        .nextBtn{
+            width: 100%;
+            height: 50px;
+            border: none;
+            color: white;
+            background-color: #3949AB;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .flecha {
+            width: 5%;
+            height: 5%;
+            display: flex;
+        }
+        
         .navbar{
             display: flex;
             flex-direction: column;
@@ -89,7 +108,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            margin-bottom: 3%;
+            overflow: hidden ;
         }
 
         .sub-line{
@@ -99,6 +118,21 @@
             height: 5px;
             border-radius: 10px;
             margin-bottom: 3%;
+        }
+
+        summary{
+            display: flex;
+            justify-content: center;
+        }
+
+        details[open]{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .infoWiFi{
+            display: flex;
+            justify-content: center;
         }
 
         .option {
