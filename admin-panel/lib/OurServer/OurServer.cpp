@@ -2,9 +2,9 @@
 
 AsyncWebServer * webServer = new AsyncWebServer(80);
 
-bool sv::InitServerWeb(void)
+bool sv::InitServerWeb(const char * _index)
 {
-    webServer->serveStatic("/", LittleFS, "/").setDefaultFile("index.html");
+    webServer->serveStatic("/", LittleFS, "/").setDefaultFile(_index);
 
     webServer->onNotFound([](AsyncWebServerRequest *request)
                       { request->send(400, "text/plain", request->url() + "Not found"); });

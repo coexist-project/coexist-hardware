@@ -31,7 +31,7 @@ void setup() {
   if(wf::InitWifi_AP("Coexist WiFi", "coexist")) Serial.println("WiFi inicializado.");
     else Serial.println("WiFi no inicializado");
 
-  if(sv::InitServerWeb()) Serial.println("Servidor inicializado.");
+  if(sv::InitServerWeb("index.html")) Serial.println("Servidor inicializado.");
     else Serial.println("Servidor no inicializado");
 }
 

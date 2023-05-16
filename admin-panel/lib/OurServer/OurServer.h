@@ -7,7 +7,7 @@
 namespace sv{
 
     void handleAssets(AsyncWebServerRequest *);
-    bool InitServerWeb();
+    bool InitServerWeb(const char *);
     String ScanNetworks();
     String ScanData();
     
