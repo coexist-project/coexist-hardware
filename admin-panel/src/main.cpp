@@ -1,29 +1,40 @@
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
+#include <OurServer.h>
+#include <OurWifi.h>
+#include <OurMdns.h>
 
-const char * ssid = "Coexist WiFi module";
-const char * password = "coexist123";
+#define LOG(x) Serial.print(x)
 
-ESP8266WebServer server(8080);
+// const char * html[] PROGMEM = R"rawfile([....])rawfile"
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(115200);
 
-  WiFi.begin();
-  WiFi.mode(WIFI_AP);
+  if (LittleFS.begin())
+      Serial.println("File system mounted!");
 
-  WiFi.softAP(ssid, password);
+  if (LittleFS.exists("/index.html"))
+  {
+      File file = LittleFS.open("/index.html", "r");
+      if (!file)
+          Serial.println("Error al leer el archivo");
+      while (file.available())
+      {
+          Serial.write(file.read());
+      }
+      file.close();
+  }
 
-  server.on("/", [](){
-    server.send(200, "text/plain", "Hola mundo");
-  });
-  
-  server.begin();
+  if(dns::InitDns("Coexist")) Serial.println("mDNS inicializado.");
+    else Serial.println("mDNS no inicializado");
+
+  if(wf::InitWifi_AP("Coexist WiFi", "coexist")) Serial.println("WiFi inicializado.");
+    else Serial.println("WiFi no inicializado");
+
+  if(sv::InitServerWeb("index.html")) Serial.println("Servidor inicializado.");
+    else Serial.println("Servidor no inicializado");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  server.handleClient();
 }
