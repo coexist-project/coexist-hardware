@@ -2,6 +2,7 @@
 #include <OurServer.h>
 #include <OurWifi.h>
 #include <OurMdns.h>
+#include <OurWebSocket.h>
 
 #define LOG(x) Serial.print(x)
 
@@ -25,10 +26,13 @@ void setup() {
       file.close();
   }
 
+  if(ws::InitWebSocketServer()) Serial.printf("WebSocketServer iniciado!");
+    else Serial.printf("WebSocketServer no iniciado!");
+
   if(dns::InitDns("Coexist")) Serial.println("mDNS inicializado.");
     else Serial.println("mDNS no inicializado");
 
-  if(wf::InitWifi_AP("Coexist WiFi", "coexist")) Serial.println("WiFi inicializado.");
+  if(wf::InitWifi_AP("Coexist WiFi", "coexist1234")) Serial.println("WiFi inicializado.");
     else Serial.println("WiFi no inicializado");
 
   if(sv::InitServerWeb("index.html")) Serial.println("Servidor inicializado.");
@@ -37,4 +41,5 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  ws::HandleWebSocketLoop();
 }
