@@ -1,25 +1,42 @@
 #include "OurServer.h"
 
-AsyncWebServer * webServer = new AsyncWebServer(80);
+ESP8266WebServer * webServer = new ESP8266WebServer(80);
 
-bool sv::InitServerWeb(const char * _index)
+StaticJsonDocument<1024> doc;
+
+bool sv::InitServerWeb() // const char * _index
 {
-    webServer->serveStatic("/", LittleFS, "/").setDefaultFile(_index);
+    // webServer->serveStatic("/", LittleFS, "/").setDefaultFile(_index);
 
-    webServer->onNotFound([](AsyncWebServerRequest *request)
-                      { request->send(400, "text/plain", request->url() + "Not found"); });
+    webServer->onNotFound(
+    []() {
+        webServer->send(400, "text/plain", webServer->uri() + " /wifi -> Redes Wi-Fi disponibles");
+    });
 
-    webServer->on("/assets", HTTP_GET, sv::handleAssets);
+    webServer->on("/wifi", 
+    []() {
+        webServer->send(200, "application/json", sv::ScanNetworks()); 
+    });
 
-    webServer->on("/wifi", HTTP_GET, [](AsyncWebServerRequest *request)
-              { request->send(200, "text/plain", sv::ScanNetworks()); });
+    
+
+    Serial.println(sv::ScanNetworks());
+
+    /*webServer->on("/assets", HTTP_GET, sv::handleAssets);
+
 
     webServer->on("/data", HTTP_GET, [](AsyncWebServerRequest *request)
               { request->send(200, "text/plain", sv::ScanData()); });
 
+    */
     webServer->begin();
 
     return true;
+}
+
+void sv::MainLoop()
+{
+    webServer->handleClient();
 }
 
 String sv::ScanData()
@@ -45,8 +62,7 @@ String sv::ScanNetworks()
     String str[8];
 
     int cantOfNetworks = WiFi.scanNetworks();
-    Serial.println(cantOfNetworks);
-
+    JsonArray networkArray = doc.to<JsonArray>();
     for (int i = 0; i < cantOfNetworks; i++)
     {
         bool *nameOfNetwork = new bool(false);
@@ -60,64 +76,14 @@ String sv::ScanNetworks()
         }
 
         if (!(*nameOfNetwork))
-        {
-            str[i] += WiFi.SSID(i);
-            Serial.println(str[i]);
+        {    
+            JsonObject networkArr = networkArray.createNestedObject();
+            networkArr["name"] = WiFi.SSID(i);
+            networkArr["security"] = WiFi.getScanInfoByIndex(i)->authmode;
         }
     }
-
-    Serial.println("-------");
-
-    String finalString = "";
-
-    for (String name : str)
-        finalString += name + " \n";
-    return finalString;
-}
-
-void sv::handleAssets(AsyncWebServerRequest *request)
-{
-    Serial.print(request->url());
-    String path = request->url();
-    String contentType = "text/plain";
-
-    if (path.endsWith(".html"))
-    {
-        contentType = "text/html";
-    }
-    else if (path.endsWith(".css"))
-    {
-        contentType = "text/css";
-    }
-    else if (path.endsWith(".js"))
-    {
-        contentType = "application/javascript";
-    }
-    else if (path.endsWith(".png"))
-    {
-        contentType = "image/png";
-    }
-    else if (path.endsWith(".gif"))
-    {
-        contentType = "image/gif";
-    }
-    else if (path.endsWith(".jpg"))
-    {
-        contentType = "image/jpeg";
-    }
-    else if (path.endsWith(".ico"))
-    {
-        contentType = "image/x-icon";
-    }
-
-    if (!LittleFS.exists(path))
-    {
-        request->send(404, "text/plain", "Not Found");
-        return;
-    }
-
-    File file = LittleFS.open(path, "r");
-
-    request->beginResponseStream(contentType, file);
-    file.close();
+    String output;
+    serializeJson(networkArray, Serial); // Serializar en una cadena
+    serializeJson(networkArray, output);
+    return output;
 }

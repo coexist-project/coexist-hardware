@@ -9,10 +9,10 @@
 
 void setup() {
   Serial.begin(115200);
-
+  Serial.println("Inicio");
   if (LittleFS.begin())
       Serial.println("File system mounted!");
-
+  
   if (LittleFS.exists("/index.html"))
   {
       File file = LittleFS.open("/index.html", "r");
@@ -28,13 +28,14 @@ void setup() {
   if(dns::InitDns("Coexist")) Serial.println("mDNS inicializado.");
     else Serial.println("mDNS no inicializado");
 
-  if(wf::InitWifi_AP("Coexist WiFi", "coexist")) Serial.println("WiFi inicializado.");
-    else Serial.println("WiFi no inicializado");
+  if(wf::InitWifi_AP("CoexistAP", "hola1234")) Serial.println("WiFi inicializado.");
+  else Serial.println("WiFi no inicializado");
 
-  if(sv::InitServerWeb("index.html")) Serial.println("Servidor inicializado.");
-    else Serial.println("Servidor no inicializado");
+  if(!sv::InitServerWeb()) Serial.println("Servidor no inicializado");
+  else Serial.println("Servidor inicializado");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  sv::MainLoop();
 }
