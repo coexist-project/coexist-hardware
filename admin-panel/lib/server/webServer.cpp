@@ -1,4 +1,5 @@
 #include "webServer.h"
+#include "Station.h"
 
 #define homepage "Welcome to Coexist Config API\nurls:\n- \"/wifi\" -> returns available WiFi networks."
 
@@ -17,6 +18,12 @@ bool sv::init()
     []() {
         webServer->sendHeader("Access-Control-Allow-Origin", "*");
         webServer->send(200, "application/json", sv::scanNetworks()); 
+    });
+
+    webServer->on("/wificonnect", HTTP_POST,
+    []() {
+        webServer->sendHeader("Access-Control-Allow-Origin", "*");
+        webServer->send(200, "text/plain", sv::handleConnection()); 
     });
 
     // Habilitar CORS
@@ -53,6 +60,26 @@ String sv::scanNetworks()
     String output;
     serializeJson(networkArray, Serial); // Serializar en una cadena
     serializeJson(networkArray, output);
+    return output;
+}
+
+String sv::handleConnection() {
+    String output;
+    String jsonPayload = webServer->arg("plain"); // Obtén el JSON del cuerpo de la solicitud
+    StaticJsonDocument<200> doc; // Tamaño del buffer para el JSON
+
+    DeserializationError error = deserializeJson(doc, jsonPayload);
+    if (error) {
+        Serial.print("Error al analizar JSON");
+        return "Error al analizar JSON";
+    }
+
+    const char* _ssid = doc["ssid"];
+    const char* _pswd = doc["psdw"];
+
+    if (sta::init(_ssid, _pswd)) output = "WiFi connected";
+    else output = "ERROR";
+
     return output;
 }
 

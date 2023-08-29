@@ -22,4 +22,9 @@ namespace sv {
      * Keeps web server running on loop()
     */
     void concurrent();
+
+    /**
+     * Handles POST request to connect ESP to WiFi
+    */
+    String handleConnection();
 }
