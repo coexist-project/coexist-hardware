@@ -13,7 +13,10 @@ bool sta::init(const char * _ssid, const char * _password) {
     else return false;
 }
 
-void sta::info() {
-    Serial.println("WiFi STA created!\n");
-    WiFi.printDiag(Serial);
+string* sta::info() {
+    const string ssid = WiFi.SSID();
+    const string psk = WiFi.psk();
+    const string* credentials = [ssid, psk];
+
+    return credentials;
 }

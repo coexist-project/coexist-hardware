@@ -27,4 +27,10 @@ namespace sv {
      * Handles POST request to connect ESP to WiFi
     */
     String handleConnection();
+
+    /**
+     * Get wifi credentials for esp32-cam
+     * @return Credentials string in JSON format
+    */
+    String getCredentials();
 }

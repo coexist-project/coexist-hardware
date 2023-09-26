@@ -26,6 +26,12 @@ bool sv::init()
         webServer->send(200, "text/plain", sv::handleConnection()); 
     });
 
+    webServer->on("/getCredentials", HTTP_GET,
+    []() {
+        webServer->sendHeader("Access-Control-Allow-Origin", "*");
+        webServer->send(200, "application/json", sv::sendCredentials());
+    });
+
     // Habilitar CORS
     // <- sendHeader("Access-Control-Allow-Origin", "*");
     webServer->begin();
@@ -80,6 +86,14 @@ String sv::handleConnection() {
     if (sta::init(_ssid, _pswd)) output = "WiFi connected";
     else output = "ERROR";
 
+    return output;
+}
+
+String sv::getCredentials() {
+    const string* credentials = sta::info();
+    
+    String output;
+    serializeJson(credentials, output);
     return output;
 }
 
