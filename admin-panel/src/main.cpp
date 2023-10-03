@@ -10,7 +10,7 @@
  * - [1] Web Server
  * - [2] Domain Name Server
 */
-#define ON_OFF 0b111
+#define ON_OFF 0b110
 
 void setup() {
     Serial.begin(115200);

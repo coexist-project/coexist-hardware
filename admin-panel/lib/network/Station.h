@@ -5,5 +5,5 @@
 
 namespace sta {
     bool init(const char *, const char *);
-    void info();
+    String* info();
 }

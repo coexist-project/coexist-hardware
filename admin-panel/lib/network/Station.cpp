@@ -13,10 +13,7 @@ bool sta::init(const char * _ssid, const char * _password) {
     else return false;
 }
 
-string* sta::info() {
-    const string ssid = WiFi.SSID();
-    const string psk = WiFi.psk();
-    const string* credentials = [ssid, psk];
-
-    return credentials;
+String* sta::info() {
+    auto wifi = WiFi;
+    return { wifi.SSID(), wifi.psk() };
 }
