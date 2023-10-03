@@ -4,6 +4,11 @@
 #include <AccessPoint.h>
 #include <webServer.h>
 
+enum Estados {
+    SETUP,
+    CONNECTED
+};
+
 /**
  * Each character represents the state of a feature, 1 = ON & 0 = OFF
  * - [0] Access point
@@ -47,6 +52,12 @@ void setup() {
 }
 
 void loop() {
-    // Loop
-    sv::concurrent();
+    Estados estado = SETUP;
+    
+    switch(estado) {
+        case SETUP:
+            // Loop
+            sv::concurrent();
+        break;
+    }
 }

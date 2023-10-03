@@ -22,6 +22,7 @@ bool sv::init()
 
     webServer->on("/wificonnect", HTTP_POST,
     []() {
+        Serial.println("/wificonnect");
         webServer->sendHeader("Access-Control-Allow-Origin", "*");
         webServer->send(200, "text/plain", sv::handleConnection()); 
     });
@@ -70,13 +71,15 @@ String sv::scanNetworks()
 }
 
 String sv::handleConnection() {
+    Serial.println("Starting");
     String output;
-    String jsonPayload = webServer->arg("plain"); // Obtén el JSON del cuerpo de la solicitud
-    StaticJsonDocument<200> doc; // Tamaño del buffer para el JSON
+    String jsonPayload = webServer->arg("plain");   // Obtén el JSON del cuerpo de la solicitud
+    StaticJsonDocument<200> doc;                    // Tamaño del buffer para el JSON
+    Serial.println("HANDLING CONNECTION!");
 
     DeserializationError error = deserializeJson(doc, jsonPayload);
     if (error) {
-        Serial.print("Error al analizar JSON");
+        Serial.println("Error al analizar JSON");
         return "Error al analizar JSON";
     }
 
@@ -86,8 +89,7 @@ String sv::handleConnection() {
     if (sta::init(_ssid, _pswd)) output = "WiFi connected";
     else output = "ERROR";
 
-    Serial.print("Connected !");
-
+    Serial.println("Connected !");
     return output;
 }
 

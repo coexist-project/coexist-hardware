@@ -14,6 +14,6 @@ bool sta::init(const char * _ssid, const char * _password) {
 }
 
 String* sta::info() {
-    auto wifi = WiFi;
-    return { wifi.SSID(), wifi.psk() };
+    String values[] = { WiFi.psk().c_str() , WiFi.SSID().c_str() };
+    return values;
 }
