@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "author": "Bautista D'hipolito",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 167.9, "left": -53, "attrs": {} },
+    {
+      "type": "board-ili9341-cap-touch",
+      "id": "lcd2",
+      "top": 325.12,
+      "left": 263.94,
+      "rotate": 90,
+      "attrs": {}
+    },
+    { "type": "wokwi-vcc", "id": "vcc1", "top": 279.16, "left": 336, "attrs": {} },
+    { "type": "wokwi-gnd", "id": "gnd1", "top": 259.2, "left": 268.2, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+    [ "esp:D19", "lcd2:MISO", "green", [ "h0" ] ],
+    [ "esp:D18", "lcd2:SCK", "green", [ "h0" ] ],
+    [ "esp:D23", "lcd2:MOSI", "green", [ "h0" ] ],
+    [ "esp:D2", "lcd2:D/C", "green", [ "h0" ] ],
+    [ "esp:D22", "lcd2:SCL", "green", [ "h0" ] ],
+    [ "lcd2:SDA", "esp:D21", "green", [ "v0" ] ],
+    [ "esp:D15", "lcd2:RST", "green", [ "h0" ] ],
+    [ "lcd2:CS", "esp:D4", "green", [ "v0" ] ],
+    [ "lcd2:VCC", "vcc1:VCC", "red", [ "v0" ] ],
+    [ "gnd1:GND", "lcd2:GND", "black", [ "h38.4", "v96", "h-105.6" ] ]
+  ],
+  "dependencies": {}
+}
