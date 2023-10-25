@@ -43,25 +43,20 @@ bool App::p_init()
 
     // Init Buttons
     {
-        for (int i = 0; i < CANT_BUTTONS; i++)
-            this->m_buttons.append(utils::Button(String(i), 500, 200, 34));
-
-        int y = 0, x = 0;
-        for (int i = 0; i < this->m_buttons.getSize(); i++)
+        for (int row = 0; row < CANT_BUTTONS / 2; row++)
         {
-            this->m_buttons[i].methods.initButton(
-                this->m_screen.surface,
-                (x)*m_buttons[i].width * 2 + (m_buttons[i].width / 2 + 10),
-                (y)*m_buttons[i].height * 2 + 80,
-                m_buttons[i].width, m_buttons[i].height,
-                ILI9341_WHITE, m_buttons[i].color, m_buttons[i].textColor, m_buttons[i].label, PARAGRAPH);
-
-            if (i == 1)
-                y += 1;
-            if (i == 1)
-                x = 0;
-            if (i != 1)
-                x += 1;
+            for (int col = 0; col < 2; col++)
+            {
+                int index = row * 2 + col;
+                utils::Button button(String(index), 500, 200, 34);
+                button.methods.initButton(
+                    m_screen.surface,
+                    col * button.width * 2 + (button.width / 2 + 10),
+                    row * button.height * 2 + 80,
+                    button.width, button.height,
+                    ILI9341_WHITE, button.color, button.textColor, button.label, PARAGRAPH);
+                m_buttons.append(button);
+            }
         }
     }
 
