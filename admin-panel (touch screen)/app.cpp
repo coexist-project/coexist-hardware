@@ -32,7 +32,6 @@ bool App::p_init()
         this->m_screen.width = new unsigned int(this->m_screen.surface->width());
         this->m_screen.height = new unsigned int(this->m_screen.surface->height());
 
-        this->m_screen.surface->setScrollMargins(0, 0);
 #if DEBUG_MODE == 1
         this->m_screen.surface->print(this->m_screen.surface->width());
         this->m_screen.surface->print("\n");
@@ -49,10 +48,10 @@ bool App::p_init()
             {
                 int index = row * 2 + col;
                 utils::Button button(String(index), 500, 200, 34);
-                button.methods.initButton(
+                button.methods.initButtonUL(
                     m_screen.surface,
-                    col * button.width * 2 + (button.width / 2 + 10),
-                    row * button.height * 2 + 80,
+                    col * button.width ,
+                    row * button.height + (index < 2? 80 : (button.height + 80)),
                     button.width, button.height,
                     ILI9341_WHITE, button.color, button.textColor, button.label, PARAGRAPH);
                 m_buttons.append(button);
@@ -259,9 +258,11 @@ void App::s_Menu()
     if (this->m_statement.alreadyDisplayed)
         return;
 
+    String title = "MENU";
+
     this->m_screen.clear();
-    this->m_screen.surface->setCursor((*m_screen.width) / 2, 10);
-    this->m_screen.surface->print("MENU");
+    this->m_screen.surface->setCursor(((*m_screen.width) / 2) - title.length() * PARAGRAPH * 5, 10);
+    this->m_screen.surface->print(title);
     this->m_screen.surface->drawFastHLine(0, 40, *m_screen.width, ILI9341_WHITE);
 
     for (int i = 0; i < this->m_buttons.getSize(); i++)

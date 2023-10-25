@@ -15,7 +15,7 @@
 #define ENDPOINT "HTTPS://api.coexist.website/api/v2/espacios/"
 
 #define CANT_BUTTONS 4
-#define WIDTH_BUTTON 100
+#define WIDTH_BUTTON 140
 #define HEIGHT_BUTTON 40
 
 namespace utils
@@ -123,7 +123,7 @@ template <typename T>
 class List
 {
 private:
-  T *_arr = nullptr;
+  T * _arr = nullptr;
   unsigned int _size = 0;
 
 public:
