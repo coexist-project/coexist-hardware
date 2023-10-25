@@ -1,3 +1,3 @@
 ## ADMIN PANEL WITH TOUCH SCREEN
 
-Proyecto actualmente desarrollandose en la plataforma de (wokwi.com)[wokwi]
+Proyecto actualmente desarrollandose en la plataforma de [wokwi](wokwi.com)
