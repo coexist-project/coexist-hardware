@@ -32,7 +32,7 @@ bool App::p_init()
         this->m_screen.width = new unsigned int(this->m_screen.surface->width());
         this->m_screen.height = new unsigned int(this->m_screen.surface->height());
 
-        this->m_screen.surface->setScrollMargins(0,0);
+        this->m_screen.surface->setScrollMargins(0, 0);
 #if DEBUG_MODE == 1
         this->m_screen.surface->print(this->m_screen.surface->width());
         this->m_screen.surface->print("\n");
@@ -42,17 +42,27 @@ bool App::p_init()
     }
 
     // Init Buttons
-    for (int i = 0; i < CANT_BUTTONS; i++)
-        this->m_buttons.append(utils::Button(String(i), 500, 200, 34));
-
-    for (int i = 0; i < 2; i++)
     {
-        this->m_buttons[i].methods.initButton(
-            this->m_screen.surface,
-            (i) * m_buttons[i].width*2 + (m_buttons[i].width / 2 + 10),
-            m_buttons[i].height*2 + 80,
-            m_buttons[i].width, m_buttons[i].height,
-            ILI9341_WHITE, m_buttons[i].color, m_buttons[i].textColor, m_buttons[i].label, PARAGRAPH);
+        for (int i = 0; i < CANT_BUTTONS; i++)
+            this->m_buttons.append(utils::Button(String(i), 500, 200, 34));
+
+        int y = 0, x = 0;
+        for (int i = 0; i < this->m_buttons.getSize(); i++)
+        {
+            this->m_buttons[i].methods.initButton(
+                this->m_screen.surface,
+                (x)*m_buttons[i].width * 2 + (m_buttons[i].width / 2 + 10),
+                (y)*m_buttons[i].height * 2 + 80,
+                m_buttons[i].width, m_buttons[i].height,
+                ILI9341_WHITE, m_buttons[i].color, m_buttons[i].textColor, m_buttons[i].label, PARAGRAPH);
+
+            if (i == 1)
+                y += 1;
+            if (i == 1)
+                x = 0;
+            if (i != 1)
+                x += 1;
+        }
     }
 
     // TODO

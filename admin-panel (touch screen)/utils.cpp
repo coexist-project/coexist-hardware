@@ -11,14 +11,17 @@
 #define PARAGRAPH 2
 #define SUBTITLE 2
 
+// ENDPOINT ../espacios/{espacio.name}/?now=true | now > 0
+#define ENDPOINT "HTTPS://api.coexist.website/api/v2/espacios/"
+
 #define CANT_BUTTONS 4
-#define WIDTH_BUTTON 70
+#define WIDTH_BUTTON 100
 #define HEIGHT_BUTTON 40
 
 namespace utils
 {
   typedef unsigned int uint_4;
-  
+
   class Button
   {
   public:
@@ -28,11 +31,11 @@ namespace utils
     unsigned color;
     unsigned textColor;
     unsigned colorOnPressed;
-    char* label = nullptr;
-    
-    Button(String _label,uint_4 _color, uint_4 _textColor, uint_4 _colorOnPressed)
+    char *label = nullptr;
+
+    Button(String _label, uint_4 _color, uint_4 _textColor, uint_4 _colorOnPressed)
     {
-      label = (char*) malloc((_label.length() + 1) * sizeof(char));
+      label = (char *)malloc((_label.length() + 1) * sizeof(char));
       strcpy(label, _label.c_str());
       color = _color;
       colorOnPressed = _colorOnPressed;
