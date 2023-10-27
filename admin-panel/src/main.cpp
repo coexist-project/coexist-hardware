@@ -1,52 +1,30 @@
-#include <Arduino.h>
+#include "main.h"
 
-#include <util.h>
-#include <AccessPoint.h>
-#include <webServer.h>
+WebServer server(80);
 
-/**
- * Each character represents the state of a feature, 1 = ON & 0 = OFF
- * - [0] Access point
- * - [1] Web Server
- * - [2] Domain Name Server
-*/
-#define ON_OFF 0b111
+void setup()
+{
+    Serial.begin(912600);
+    tools::log(" ");
+    tools::log(" -- Coexist Hardware -- ");
+    tools::log(" ");
 
-void setup() {
-    Serial.begin(115200);
-
-    //? Access Point Setup
-    if ((ON_OFF || 0b011) && 0b111) {
-        bool ap_status = ap::init("Coexist WiFi", "coexist1234");
-        if (!ap_status) {
-            util::error("WiFi no inicializado");
-            return;
-        }
-        util::log("- WiFi inicializado.");
-    }
-    
-    //? Web Server Setup
-    if ((ON_OFF || 0b101) && 0b111) {
-        bool sv_status = sv::init();
-        if (!sv_status) {
-            util::error("Servidor no inicializado");
-            return;
-        }
-        util::log("- Servidor inicializado");
-    }
-
-    //? Domain Name Server Setup
-    if ((ON_OFF || 0b110) && 0b111) {
-        bool dns_status = util::initDns("coexist");
-        if (!dns_status) {
-            util::error("DNS no inicializado");
-            return;
-        }
-        util::log("- DNS inicializado.");
-    }
+    router::setup();
 }
 
-void loop() {
-    // Loop
-    sv::concurrent();
+static int flowControl = ESTADO_SETUP;
+
+void loop()
+{
+
+    switch (flowControl)
+    {
+    case ESTADO_SETUP:
+        flow::machineSetup(flowControl);
+        break;
+
+    case ESTADO_ACCESSPOINT:
+        server.handleClient();
+        break;
+    }
 }

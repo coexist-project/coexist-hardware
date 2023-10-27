@@ -1,5 +1,5 @@
 #include "webServer.h"
-#include "Station.h"
+#include <Station.h>
 
 #define homepage "Welcome to Coexist Config API\nurls:\n- \"/wifi\" -> returns available WiFi networks."
 
@@ -22,15 +22,16 @@ bool sv::init()
 
     webServer->on("/wificonnect", HTTP_POST,
     []() {
+        Serial.println("/wificonnect");
         webServer->sendHeader("Access-Control-Allow-Origin", "*");
         webServer->send(200, "text/plain", sv::handleConnection()); 
     });
 
-    webServer->on("/getCredentials", HTTP_GET,
-    []() {
-        webServer->sendHeader("Access-Control-Allow-Origin", "*");
-        webServer->send(200, "application/json", sv::sendCredentials());
-    });
+    // webServer->on("/getCredentials", HTTP_GET,
+    // []() {
+    //     webServer->sendHeader("Access-Control-Allow-Origin", "*");
+    //     webServer->send(200, "application/json", sv::sendCredentials());
+    // });
 
     // Habilitar CORS
     // <- sendHeader("Access-Control-Allow-Origin", "*");
@@ -70,13 +71,15 @@ String sv::scanNetworks()
 }
 
 String sv::handleConnection() {
+    Serial.println("Starting");
     String output;
-    String jsonPayload = webServer->arg("plain"); // Obtén el JSON del cuerpo de la solicitud
-    StaticJsonDocument<200> doc; // Tamaño del buffer para el JSON
+    String jsonPayload = webServer->arg("plain");   // Obtén el JSON del cuerpo de la solicitud
+    StaticJsonDocument<200> doc;                    // Tamaño del buffer para el JSON
+    Serial.println("HANDLING CONNECTION!");
 
     DeserializationError error = deserializeJson(doc, jsonPayload);
     if (error) {
-        Serial.print("Error al analizar JSON");
+        Serial.println("Error al analizar JSON");
         return "Error al analizar JSON";
     }
 
@@ -86,15 +89,18 @@ String sv::handleConnection() {
     if (sta::init(_ssid, _pswd)) output = "WiFi connected";
     else output = "ERROR";
 
+    Serial.println("Connected !");
     return output;
 }
 
 String sv::getCredentials() {
-    const string* credentials = sta::info();
+    const String* credentials = sta::info();
     
-    String output;
-    serializeJson(credentials, output);
-    return output;
+    // String output;
+    // serializeJson(credentials, output);
+
+    Serial.print(credentials[0] + "\n" + credentials[1]);
+    return credentials[0] + "\n" + credentials[1];
 }
 
 void sv::concurrent()
