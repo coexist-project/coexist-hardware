@@ -2,13 +2,13 @@
 
 void router::setup()
 {
-  server.on("/", HTTP_GET, []() -> void
-            { route::getHome(); });
-  server.on("/api", HTTP_GET, []() -> void
-            { route::getApiRoutes(); });
+  server.on("/", HTTP_GET, route::getHome);
 
-  server.on("/wifi", HTTP_GET, []() -> void
-            { route::getWiFis(); });
+  server.on("/api", HTTP_GET, route::getApiRoutes);
+
+  server.on("/wifi", HTTP_GET, route::getWiFis);
+
+  server.on("/connect", HTTP_POST, route::postConnection);
 
   //? Not found
   server.onNotFound([]() -> void
