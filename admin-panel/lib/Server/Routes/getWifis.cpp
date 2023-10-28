@@ -1,5 +1,15 @@
 #include "routes.h"
 
+StaticJsonDocument<250> jsonError(int status, String msg)
+{
+  StaticJsonDocument<250> jsonDocument;
+
+  jsonDocument["status"] = status;
+  jsonDocument["msg"] = msg;
+
+  return jsonDocument;
+}
+
 void route::getWiFis()
 {
   String buffer;
@@ -40,7 +50,7 @@ void route::getWiFis()
 
 void route::postConnection()
 {
-  tools::log("Connecting");
+  tools::log("Connecting...");
   String output;
   String jsonPayload = server.arg("plain"); // Obtén el JSON del cuerpo de la solicitud
   StaticJsonDocument<250> jsonDocument;
@@ -49,15 +59,25 @@ void route::postConnection()
   if (error)
   {
     tools::error("Error al analizar JSON");
+    serializeJson(jsonError(400, "Formato invalido."), output);
+    server.send(200, "application/json", output);
     return;
   }
 
-  const String _ssid = jsonDocument["ssid"];
-  const String _pswd = jsonDocument["psdw"];
+  const char *_ssid = jsonDocument["ssid"];
+  const char *_pswd = jsonDocument["pswd"];
 
   // HANDLE CONNECTION
+  if (sta::init(_ssid, _pswd))
+  {
+    tools::error("STA not working");
+    serializeJson(jsonError(400, "STA not working."), output);
+    server.send(200, "application/json", output);
+    return;
+  }
 
-  server.send(200, "text/plain", "CONNECTING");
+  ESTADO = ESTADO_CONNECTED;
+  server.send(200, "text/plain", "Connected!");
 }
 
 /* HandleCon

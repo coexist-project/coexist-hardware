@@ -1,6 +1,7 @@
 #include "main.h"
 
 WebServer server(80);
+int ESTADO = ESTADO_SETUP;
 
 void setup()
 {
@@ -12,19 +13,22 @@ void setup()
     router::setup();
 }
 
-static int flowControl = ESTADO_SETUP;
-
 void loop()
 {
 
-    switch (flowControl)
+    switch (ESTADO)
     {
     case ESTADO_SETUP:
-        flow::machineSetup(flowControl);
+        flow::machineSetup();
         break;
 
     case ESTADO_ACCESSPOINT:
         server.handleClient();
+        break;
+
+    case ESTADO_CONNECTED:
+        tools::log("CONNECTED!!!");
+        delay(1000);
         break;
     }
 }

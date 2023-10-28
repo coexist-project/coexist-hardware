@@ -4,8 +4,10 @@
 #include <ArduinoJson.h>
 
 #include "gWebServer.h"
+#include "estados.h"
 #include "jsonConverters.h"
 #include "tools.h"
+#include "Station.h"
 
 #define homepage "Welcome to Coexist Hardware Config API"
 

@@ -1,9 +1,10 @@
-// #pragma once
+#pragma once
 
-// #include <Arduino.h>
-// #include <ESP8266WiFi.h>
+#include <Arduino.h>
+#include <tools.h>
+#include <WiFi.h>
 
-// namespace sta {
-//     bool init(const char *, const char *);
-//     String* info();
-// }
+namespace sta
+{
+  bool init(const char *, const char *);
+}

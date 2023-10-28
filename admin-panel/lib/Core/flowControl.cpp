@@ -3,7 +3,7 @@
 IPAddress apIP(192, 168, 1, 1);
 DNSServer dnsServer;
 
-void flow::machineSetup(int &state)
+void flow::machineSetup()
 {
   tools::log("> SETUP");
 
@@ -20,6 +20,6 @@ void flow::machineSetup(int &state)
   server.begin();
   dnsServer.processNextRequest();
 
-  state = ESTADO_ACCESSPOINT;
+  ESTADO = ESTADO_ACCESSPOINT;
   tools::log("> ACCESS_POINT");
 }

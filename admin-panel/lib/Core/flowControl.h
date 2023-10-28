@@ -11,5 +11,5 @@
 // State Machine
 namespace flow
 {
-  void machineSetup(int &state);
+  void machineSetup();
 }
