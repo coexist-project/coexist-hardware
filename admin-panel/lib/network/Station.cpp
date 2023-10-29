@@ -1,6 +1,6 @@
 #include "Station.h"
 
-#define STA_TIMEOUT_MS 20000
+#define STA_TIMEOUT_MS 10000
 
 bool sta::init(const char *_ssid, const char *_password)
 {
