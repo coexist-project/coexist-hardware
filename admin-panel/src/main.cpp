@@ -27,8 +27,7 @@ void loop()
         break;
 
     case ESTADO_CONNECTED:
-        tools::log("CONNECTED!!!");
-        delay(1000);
+        server.handleClient();
         break;
     }
 }

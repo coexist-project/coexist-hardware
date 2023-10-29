@@ -23,8 +23,21 @@ void route::getApiRoutes()
 {
   String buffer;
 
-  String keys[] = {"msg", "/wifi"};
-  String values[] = {homepage, "Get all available WiFis"};
+  String keys[] = {"msg", "/wifi", "/status", "/connect"};
+  String values[] = {homepage, "Get all available WiFis", "Get ESP connection status", "Send SSID and password to connect ESP"};
+
+  json::createDoc(keys, values, 2, buffer);
+  server.send(200, "application/json", buffer);
+}
+
+void route::getESPStatus()
+{
+  String buffer;
+  bool connected = ESTADO == ESTADO_CONNECTED;
+
+  String keys[] = {"status", "ssid"};
+  String values[] = {
+      connected ? "OK" : "AP", connected ? WiFi.SSID() : ""};
 
   json::createDoc(keys, values, 2, buffer);
   server.send(200, "application/json", buffer);

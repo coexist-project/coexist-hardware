@@ -1,11 +1,13 @@
 #include "routes.h"
 
-StaticJsonDocument<250> jsonError(int status, String msg)
+StaticJsonDocument<250> jsonResponse(int status, String msg, String payload = "")
 {
   StaticJsonDocument<250> jsonDocument;
 
   jsonDocument["status"] = status;
   jsonDocument["msg"] = msg;
+  if (payload != "")
+    jsonDocument["data"] = payload;
 
   return jsonDocument;
 }
@@ -59,7 +61,7 @@ void route::postConnection()
   if (error)
   {
     tools::error("Error al analizar JSON");
-    serializeJson(jsonError(400, "Formato invalido."), output);
+    serializeJson(jsonResponse(400, "Formato invalido."), output);
     server.send(200, "application/json", output);
     return;
   }
@@ -70,14 +72,15 @@ void route::postConnection()
   // HANDLE CONNECTION
   if (sta::init(_ssid, _pswd))
   {
-    tools::error("STA not working");
-    serializeJson(jsonError(400, "STA not working."), output);
+    tools::error("Failed to connect to STA.");
+    serializeJson(jsonResponse(400, "Failed to connect to to STA."), output);
     server.send(200, "application/json", output);
     return;
   }
 
   ESTADO = ESTADO_CONNECTED;
-  server.send(200, "text/plain", "Connected!");
+  serializeJson(jsonResponse(200, "Connected to " + String(_ssid), String(_ssid)), output);
+  server.send(200, "application/json", output);
 }
 
 /* HandleCon

@@ -2,7 +2,11 @@
 
 void router::setup()
 {
+  server.enableCORS(true);
+
   server.on("/", HTTP_GET, route::getHome);
+
+  server.on("/status", HTTP_GET, route::getESPStatus);
 
   server.on("/api", HTTP_GET, route::getApiRoutes);
 

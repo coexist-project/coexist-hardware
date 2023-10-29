@@ -24,7 +24,7 @@ bool sta::init(const char *_ssid, const char *_password)
 
   if (WiFi.status() != WL_CONNECTED)
   {
-    tools::error("Failed to connect to STA.");
+    tools::log("");
     return true;
   }
 

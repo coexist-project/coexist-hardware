@@ -2,6 +2,8 @@
 
 void json::createDoc(String *keys, String *values, int count, String &buffer)
 {
+  if (count <= 0)
+    return;
   // Temp. JSON document
   StaticJsonDocument<250> jsonDocument;
   jsonDocument.clear();

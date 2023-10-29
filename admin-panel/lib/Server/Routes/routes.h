@@ -13,8 +13,14 @@
 
 namespace route
 {
+  /* #### Homepage */
   void getHome();
+  /* #### Api Routes View */
   void getApiRoutes();
+  /* #### Available WiFis View */
   void getWiFis();
+  /* #### ESP connection status */
+  void getESPStatus();
+  /* #### Connect */
   void postConnection();
 }
