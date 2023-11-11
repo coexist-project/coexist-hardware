@@ -1,30 +1,7 @@
 #include "fb.h"
 
-String getEstado()
+void FB::init()
 {
-  switch (ESTADO)
-  {
-  case 0:
-    return "ESTADO_SETUP";
-    break;
-  case 1:
-    return "ESTADO_ACCESSPOINT";
-    break;
-  case 2:
-    return "ESTADO_CONNECTED";
-    break;
-
-  default:
-    return "OFF";
-    break;
-  }
-}
-
-void fb::init()
-{
-
-  FirebaseAuth auth;
-  FirebaseConfig config;
   // Assign the project host and api key
   config.api_key = API_KEY;
 
@@ -34,10 +11,10 @@ void fb::init()
 
   // Initialize the library with the Firebase authen and config.
   tools::log("> Setup Firebase");
-  Firebase.begin(&this->config, &this->auth);
+  Firebase.begin(&config, &auth);
 }
 
-void fb::firestoreDataUpdate(String ORG, String id)
+void FB::firestoreDataUpdate(String ORG, String id)
 {
   if (WiFi.status() != WL_CONNECTED)
   {
@@ -53,10 +30,7 @@ void fb::firestoreDataUpdate(String ORG, String id)
 
   String docPath = "ORG/" + ORG + "/devices/" + id;
 
-  FirebaseJson content;
-
-  tools::log(String(ESTADO));
-  content.set("fields/ESTADO/string", getEstado());
+  content.set("fields/ESTADO/string", flowControl.getEstadoString());
 
   if (Firebase.Firestore.createDocument(&fbdo, FB_PROJECT_ID, "", docPath.c_str(), content.raw()))
   {

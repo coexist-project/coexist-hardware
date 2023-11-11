@@ -1,28 +1,13 @@
 #include "routes.h"
 
-StaticJsonDocument<250> jsonResponse(int status, String msg, String payload = "")
+void Routes::getWiFis()
 {
-  StaticJsonDocument<250> jsonDocument;
-
-  jsonDocument["status"] = status;
-  jsonDocument["msg"] = msg;
-  if (payload != "")
-    jsonDocument["data"] = payload;
-
-  return jsonDocument;
-}
-
-void route::getWiFis()
-{
-  String buffer;
   String str[8];
-
-  // Temp. JSON document
-  StaticJsonDocument<250> jsonDocument;
+  JsonTools jsonTools;
 
   // Cantidad de WiFis detectadas
   int cantOfNetworks = WiFi.scanNetworks();
-  JsonArray networkArray = jsonDocument.to<JsonArray>();
+  JsonArray networkArray = jsonTools.jsonDocument.to<JsonArray>();
 
   for (int i = 0; i < cantOfNetworks; i++)
   {
@@ -45,17 +30,16 @@ void route::getWiFis()
     }
   }
 
-  // serializeJson(networkArray, Serial); // Serializar en una cadena
-  serializeJson(networkArray, buffer);
-  server.send(200, "application/json", buffer);
+  serializeJson(networkArray, jsonTools.buffer);
+  server.send(200, "application/json", jsonTools.buffer);
 }
 
-void route::postConnection()
+void Routes::postConnection()
 {
   tools::log("Connecting...");
   String output;
+  JsonTools jsonTools;
   String jsonPayload = server.arg("plain"); // Obtén el JSON del cuerpo de la solicitud
-  StaticJsonDocument<250> jsonDocument;
 
   DeserializationError error = deserializeJson(jsonDocument, jsonPayload);
   if (error)
@@ -73,25 +57,12 @@ void route::postConnection()
   if (sta::init(_ssid, _pswd))
   {
     tools::error("Failed to connect to STA.");
-    serializeJson(jsonResponse(400, "Failed to connect to to STA."), output);
+    serializeJson(jsonTools.createResponse(400, "Failed to connect to to STA."), output);
     server.send(200, "application/json", output);
     return;
   }
 
-  ESTADO = ESTADO_CONNECTED;
-  serializeJson(jsonResponse(200, "Connected to " + String(_ssid), String(_ssid)), output);
+  flowControl.setEstado(Control::ESTADO_CONNECTED);
+  serializeJson(jsonTools.createResponse(200, "Connected to " + String(_ssid), String(_ssid)), output);
   server.send(200, "application/json", output);
 }
-
-/* HandleCon
-String sv::handleConnection() {
-    Serial.println("Starting");
-    Serial.println("HANDLING CONNECTION!");
-
-    if (sta::init(_ssid, _pswd)) output = "WiFi connected";
-    else output = "ERROR";
-
-    Serial.println("Connected !");
-    return output;
-}
-*/

@@ -5,11 +5,14 @@
 namespace tools
 {
     /**
-     * Serial log error message
+     * @brief log error message
      * @param msg Error msg
      */
     void error(const String);
 
-    /** @param msg Log msg */
+    /**
+     * @brief log message
+     * @param msg Log msg
+     */
     void log(const String);
 }

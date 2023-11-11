@@ -1,20 +1,41 @@
 #include "AccessPoint.h"
 
-bool ap::init(IPAddress apIP, DNSServer &dnsServer, const char *_ssid, const char *_password = NULL)
-{
-    WiFi.mode(WIFI_AP);
-    WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
+AP ap;
 
-    if (WiFi.softAP(_ssid, _password))
-    {
-        dnsServer.start(53, "*", apIP);
-        return true;
-    }
-    else
-        return false;
+AP::AP(String _ssid, String _password = "")
+{
+	ssid = _ssid;
+	password = _password;
+	ap_status = OFF;
 }
 
-void ap::info()
+bool AP::init()
 {
-    WiFi.printDiag(Serial);
+	ap_status = STARTING;
+
+	WiFi.mode(WIFI_AP);
+	WiFi.softAPConfig(ap_ip, ap_ip, IPAddress(255, 255, 255, 0));
+
+	if (WiFi.softAP(&ssid, &password))
+	{
+		if (!(getDNS().start(53, "*", ap_ip)))
+		{
+			tools::error("DNS Fail!");
+			ap_status = ERROR;
+		}
+
+		tools::log("DNS Success");
+		ap_status = ON;
+		return true;
+	}
+	else
+	{
+		ap_status = ERROR;
+		return false;
+	}
+}
+
+void AP::info()
+{
+	WiFi.printDiag(Serial);
 }

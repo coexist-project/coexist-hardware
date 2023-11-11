@@ -11,34 +11,28 @@ String responseHTML = "<!DOCTYPE html>"
                       "</body>"
                       "</html>";
 
-void route::getHome()
+void Routes::getHome()
 {
-  server.client().println("HTTP/1.1 200 OK");
-  server.client().println("Content-type:text/html");
-  server.client().println();
-  server.client().print(responseHTML);
+  server.send(200, "text/html", responseHTML);
 }
 
-void route::getApiRoutes()
+void Routes::getApiRoutes()
 {
-  String buffer;
-
   String keys[] = {"msg", "/wifi", "/status", "/connect"};
   String values[] = {homepage, "Get all available WiFis", "Get ESP connection status", "Send SSID and password to connect ESP"};
 
-  json::createDoc(keys, values, 2, buffer);
-  server.send(200, "application/json", buffer);
+  JsonTools::createDoc(keys, values);
+  server.send(200, "application/json", JsonTools::buffer);
 }
 
-void route::getESPStatus()
+void Routes::getESPStatus()
 {
-  String buffer;
-  bool connected = ESTADO == ESTADO_CONNECTED;
+  bool connected = flowControl.estado == Estados::ESTADO_CONNECTED;
 
   String keys[] = {"status", "ssid"};
   String values[] = {
       connected ? "OK" : "AP", connected ? WiFi.SSID() : ""};
 
-  json::createDoc(keys, values, 2, buffer);
-  server.send(200, "application/json", buffer);
+  json::createDoc(keys, values);
+  server.send(200, "application/json", JsonTools::buffer);
 }

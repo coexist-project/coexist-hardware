@@ -1,14 +1,13 @@
-#include "flowControl.h"
+#include "Logic.h"
 
-IPAddress apIP(192, 168, 1, 1);
-DNSServer dnsServer;
+Logic logic;
 
-void flow::machineSetup()
+void Logic::estado_setup()
 {
   tools::log("> SETUP");
 
   //? Access Point Setup
-  bool ap_status = ap::init(apIP, dnsServer, "Coexist WiFi", "");
+  bool ap_status = ap::init("Coexist WiFi", "");
   if (!ap_status)
     tools::error("WiFi no inicializado");
   else
@@ -20,6 +19,6 @@ void flow::machineSetup()
   server.begin();
   dnsServer.processNextRequest();
 
-  ESTADO = ESTADO_ACCESSPOINT;
+  flowControl.setEstado(Control::ESTADO_ACCESSPOINT);
   tools::log("> ACCESS_POINT");
 }

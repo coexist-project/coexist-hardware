@@ -1,10 +1,12 @@
 #pragma once
 
 #include <WebServer.h>
-#include "gWebServer.h"
-#include "Routes/routes.h"
 
-namespace router
+class Router
 {
+public:
+  WebServer server;
   void setup();
-}
+};
+
+extern Router router;

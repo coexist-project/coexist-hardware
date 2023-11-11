@@ -1,24 +1,32 @@
 #pragma once
 
-#include <Arduino.h>
-#include <tools.h>
-#include <WiFi.h>
-#include <DNSServer.h>
+#include "Network.h"
 
-namespace ap
+class AP : public Network
 {
-    /**
-     * Init Access Point (AP) WiFi.
-     * @param IPAddr Access IP
-     * @param DNSServer Reference to DNSServer instance
-     * @param _ssid WiFi Access Point SSID
-     * @param _pswd WiFi Access Point password
-     * @return
-     */
-    bool init(IPAddress, DNSServer &dnsServer, const char *, const char *);
+private:
+	String ssid;
+	String password;
+	IPAddress ap_ip;
 
-    /**
-     * Prints Access Point details.
-     */
-    void info();
-}
+public:
+	/**
+	 * @brief Access Point Instance Constructor
+	 * @param ssid AP SSID
+	 * @param password (optional) AP Password
+	 */
+	AP(String _ssid, String _password = "");
+
+	/**
+	 * @brief Turns on Access Point
+	 * @return Status boolean
+	 */
+	bool init();
+
+	/**
+	 * @brief Prints WiFi info
+	 */
+	void info();
+};
+
+extern AP ap;

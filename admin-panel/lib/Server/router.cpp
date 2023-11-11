@@ -1,18 +1,23 @@
 #include "router.h"
+#include "Routes/routes.h"
 
-void router::setup()
+Router router;
+
+void Router::setup()
 {
+  Routes routes;
+
   server.enableCORS(true);
 
-  server.on("/", HTTP_GET, route::getHome);
+  server.on("/", HTTP_GET, routes.getHome);
 
-  server.on("/status", HTTP_GET, route::getESPStatus);
+  server.on("/status", HTTP_GET, routes.getESPStatus);
 
-  server.on("/api", HTTP_GET, route::getApiRoutes);
+  server.on("/api", HTTP_GET, routes.getApiRoutes);
 
-  server.on("/wifi", HTTP_GET, route::getWiFis);
+  server.on("/wifi", HTTP_GET, routes.getWiFis);
 
-  server.on("/connect", HTTP_POST, route::postConnection);
+  server.on("/connect", HTTP_POST, routes.postConnection);
 
   //? Not found
   server.onNotFound([]() -> void

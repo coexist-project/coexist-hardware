@@ -2,17 +2,18 @@
 
 #include <WebServer.h>
 #include <ArduinoJson.h>
+#include <Arduino.h>
 
-#include "gWebServer.h"
-#include "estados.h"
-#include "jsonConverters.h"
-#include "tools.h"
-#include "Station.h"
+#include <Control.h>
+#include <jsonTools.h>
+#include <tools.h>
+#include <Station.h>
 
 #define homepage "Welcome to Coexist Hardware Config API"
 
-namespace route
+class Routes : Router
 {
+public:
   /* #### Homepage */
   void getHome();
   /* #### Api Routes View */
