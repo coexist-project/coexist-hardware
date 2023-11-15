@@ -2,8 +2,8 @@
 
 void Routes::getWiFis()
 {
+  tools::log("Getting WiFis");
   String str[8];
-  JsonTools jsonTools;
 
   // Cantidad de WiFis detectadas
   int cantOfNetworks = WiFi.scanNetworks();
@@ -30,39 +30,42 @@ void Routes::getWiFis()
     }
   }
 
+  tools::log("ok WiFis");
+  jsonTools.buffer.clear();
   serializeJson(networkArray, jsonTools.buffer);
-  server.send(200, "application/json", jsonTools.buffer);
+  router.server->send(200, "application/json", jsonTools.buffer);
+  tools::log("ret");
 }
 
 void Routes::postConnection()
 {
   tools::log("Connecting...");
   String output;
-  JsonTools jsonTools;
-  String jsonPayload = server.arg("plain"); // Obtén el JSON del cuerpo de la solicitud
+  String jsonPayload = router.server->arg("plain"); // Obtén el JSON del cuerpo de la solicitud
 
-  DeserializationError error = deserializeJson(jsonDocument, jsonPayload);
+  jsonPayload.clear();
+  DeserializationError error = deserializeJson(jsonTools.jsonDocument, jsonPayload);
   if (error)
   {
     tools::error("Error al analizar JSON");
-    serializeJson(jsonResponse(400, "Formato invalido."), output);
-    server.send(200, "application/json", output);
+    serializeJson(jsonTools.createResponse(400, "Formato invalido."), output);
+    router.server->send(200, "application/json", output);
     return;
   }
 
-  const char *_ssid = jsonDocument["ssid"];
-  const char *_pswd = jsonDocument["pswd"];
+  const char *_ssid = jsonTools.jsonDocument["ssid"];
+  const char *_pswd = jsonTools.jsonDocument["pswd"];
 
   // HANDLE CONNECTION
-  if (sta::init(_ssid, _pswd))
+  if (sta.init(_ssid, _pswd))
   {
     tools::error("Failed to connect to STA.");
     serializeJson(jsonTools.createResponse(400, "Failed to connect to to STA."), output);
-    server.send(200, "application/json", output);
+    router.server->send(200, "application/json", output);
     return;
   }
 
   flowControl.setEstado(Control::ESTADO_CONNECTED);
   serializeJson(jsonTools.createResponse(200, "Connected to " + String(_ssid), String(_ssid)), output);
-  server.send(200, "application/json", output);
+  router.server->send(200, "application/json", output);
 }

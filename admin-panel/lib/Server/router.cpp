@@ -1,25 +1,25 @@
 #include "router.h"
-#include "Routes/routes.h"
 
 Router router;
 
 void Router::setup()
 {
-  Routes routes;
+  server = std::unique_ptr<WebServer>(new WebServer(80));
 
-  server.enableCORS(true);
+  router.server->enableCORS(true);
 
-  server.on("/", HTTP_GET, routes.getHome);
+  router.server->on("/", HTTP_GET, Routes::getHome);
 
-  server.on("/status", HTTP_GET, routes.getESPStatus);
+  router.server->on("/status", HTTP_GET, Routes::getESPStatus);
 
-  server.on("/api", HTTP_GET, routes.getApiRoutes);
+  router.server->on("/api", HTTP_GET, Routes::getApiRoutes);
 
-  server.on("/wifi", HTTP_GET, routes.getWiFis);
+  router.server->on("/wifi", HTTP_GET, Routes::getWiFis);
 
-  server.on("/connect", HTTP_POST, routes.postConnection);
+  router.server->on("/connect", HTTP_POST, Routes::postConnection);
 
   //? Not found
-  server.onNotFound([]() -> void
-                    { server.send(404, "text/plain", "No handler found for this route."); });
+  router.server->onNotFound(Routes::notFound);
+
+  tools::log("Setup OK!");
 }

@@ -14,6 +14,8 @@ void JsonTools::createDoc(String *keys, String *values)
   jsonDocument.clear();
   buffer.clear();
 
+  short count = (sizeof(keys) / sizeof(keys[0]));
+
   for (int i = 0; i < count; ++i)
   {
     jsonDocument[keys[i]] = values[i];
@@ -22,7 +24,7 @@ void JsonTools::createDoc(String *keys, String *values)
   serializeJson(jsonDocument, buffer);
 }
 
-JSONResponse JsonTools::createResponse(int status, String msg, String payload = "")
+JSONResponse JsonTools::createResponse(int status, String msg, String payload)
 {
   jsonDocument["status"] = status;
   jsonDocument["msg"] = msg;

@@ -8,20 +8,24 @@
 #include <jsonTools.h>
 #include <tools.h>
 #include <Station.h>
+#include <Router.h>
 
 #define homepage "Welcome to Coexist Hardware Config API"
 
-class Routes : Router
+class Routes
 {
 public:
   /* #### Homepage */
-  void getHome();
+  static void getHome();
   /* #### Api Routes View */
-  void getApiRoutes();
+  static void getApiRoutes();
   /* #### Available WiFis View */
-  void getWiFis();
+  static void getWiFis();
   /* #### ESP connection status */
-  void getESPStatus();
+  static void getESPStatus();
   /* #### Connect */
-  void postConnection();
-}
+  static void postConnection();
+
+  /* #### Not found */
+  static void notFound();
+};

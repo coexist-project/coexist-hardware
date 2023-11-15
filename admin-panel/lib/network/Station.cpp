@@ -2,15 +2,16 @@
 
 STA sta;
 
-STA::STA(String _ssid, String _password)
+STA::STA()
 {
-  ssid = _ssid;
-  password = _password;
   sta_status = OFF;
 }
 
-bool STA::init()
+bool STA::init(String _ssid, String _pswd)
 {
+  ssid = _ssid;
+  password = _pswd;
+
   sta_status = STARTING;
   WiFi.mode(WIFI_AP_STA);
 

@@ -13,7 +13,7 @@ String responseHTML = "<!DOCTYPE html>"
 
 void Routes::getHome()
 {
-  server.send(200, "text/html", responseHTML);
+  router.server->send(200, "text/html", responseHTML);
 }
 
 void Routes::getApiRoutes()
@@ -21,18 +21,23 @@ void Routes::getApiRoutes()
   String keys[] = {"msg", "/wifi", "/status", "/connect"};
   String values[] = {homepage, "Get all available WiFis", "Get ESP connection status", "Send SSID and password to connect ESP"};
 
-  JsonTools::createDoc(keys, values);
-  server.send(200, "application/json", JsonTools::buffer);
+  jsonTools.createDoc(keys, values);
+  router.server->send(200, "application/json", jsonTools.buffer);
 }
 
 void Routes::getESPStatus()
 {
-  bool connected = flowControl.estado == Estados::ESTADO_CONNECTED;
+  bool connected = flowControl.estado == Control::Estados::ESTADO_CONNECTED;
 
   String keys[] = {"status", "ssid"};
   String values[] = {
       connected ? "OK" : "AP", connected ? WiFi.SSID() : ""};
 
-  json::createDoc(keys, values);
-  server.send(200, "application/json", JsonTools::buffer);
+  jsonTools.createDoc(keys, values);
+  router.server->send(200, "application/json", jsonTools.buffer);
+}
+
+void Routes::notFound()
+{
+  router.server->send(404, "text/plain", "No handler found for this route.");
 }

@@ -16,14 +16,14 @@ public:
    * @param ssid WiFi SSID to connect
    * @param password WiFi password to connect
    */
-  STA(String _ssid, String _password);
+  STA();
 
   /**
    * @brief Initialize connetion to WiFi
    */
-  void init();
-  void info();
-  void disconnected();
+  bool init(String _ssid, String _pswd);
+  // void info();
+  // void disconnected();
 };
 
 extern STA sta;

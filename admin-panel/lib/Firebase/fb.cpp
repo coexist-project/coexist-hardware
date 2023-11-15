@@ -1,5 +1,7 @@
 #include "fb.h"
 
+FB fb;
+
 void FB::init()
 {
   // Assign the project host and api key

@@ -15,6 +15,8 @@ public:
     ESTADO_ACCESSPOINT,
     // Working State
     ESTADO_CONNECTED,
+    // Error States
+    ESTADO_ERROR,
   };
 
   /**
@@ -42,8 +44,9 @@ public:
    */
   JSONResponse getESPStatus();
 
-private:
   Estados estado;
+
+private:
   DeviceID id;
 };
 

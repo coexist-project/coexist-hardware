@@ -33,6 +33,6 @@ void Control::setEstado(Estados e)
   estado = e;
 }
 
-Control::JSONResponse Control::getESPStatus()
+JSONResponse Control::getESPStatus()
 {
 }
